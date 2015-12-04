@@ -1,13 +1,11 @@
 
 <?php
-echo "WE ARE in the THE POST EMAIL LOOP Block but not inside the loop";
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 if(isset($_POST['EmailLogin']))
 {
 
-echo "WE ARE INSIDE THE POST EMAIL LOOP";
 
 $emailLog = $_POST['EmailLogin'];
 
@@ -27,21 +25,19 @@ $stmt = sqlsrv_query($conn,$sql,$params);
 		if( sqlsrv_fetch( $stmt ) == false) {
      		die( print_r( sqlsrv_errors(), true));
 		}
-		echo "STATEMENT STATEMENT STATEMENT STATEMENT";
-		echo $stmt;
 		
 		$name = sqlsrv_get_field($stmt, 0);
 
-		echo "NAME NAME NAME NAME";
-		echo $name;
 $cookie_name = 'phpCookieName';
 $cookie_value = $name;
 $_COOKIE['phpCookieName'] = $name;
 
-echo "Cookie '" .$cookie_name . "'is set!<br>";
-echo "Value i: " .$_COOKIE[$cookie_name];
+$cookie_Email = 'email';
+$cookie_Emailvalue = $emailLog;
+$_COOKIE['email'] = $name;
 
 setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/');
+setcookie($cookie_Email, $cookie_Emailvalue, time() + (86400 * 30), '/');
 }
 ?>
 
@@ -106,7 +102,7 @@ setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/');
       </div>
 
       <hr>
-<div>Other cookie name:<div id="othercookiename"></div></div>
+
 
 
 

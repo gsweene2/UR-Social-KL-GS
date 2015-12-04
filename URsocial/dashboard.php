@@ -1,3 +1,4 @@
+
 <!doctype html>
 
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -35,6 +36,19 @@
                 padding-bottom: 20px;
 
             }
+			
+			#chartdiv{
+				display: inline-block;
+				width: 100%;
+				 height: 500px;
+				 
+			}
+			
+			#categoryView{
+				display: inline-block;
+				width: 100%; 
+				height: 500px;
+			}
 
         </style>
 
@@ -45,6 +59,8 @@
 
 
         <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+		
+				<script src="js/jquery.js"></script>
 
     </head>
 
@@ -52,41 +68,76 @@
 
 <?php include "inc/nav.inc" ?>
 
-        
+        <br/>
+		<br/>
+		
+		
+          <ul class="nav nav-sidebar">
+            <li id="everyoneNav" class="active"><a href="#">Everybody <span class="sr-only">(current)</span></a></li>
+            <li id="barsNav"><a href="#">Bars</a></li>
+            <li id="libNav"><a href="#">Libraries</a></li>
+            <li id="otherNav"><a href="#">Other</a></li>
+          </ul>
+<!-- chart 1 -->
+				<div id="chartdiv" class="displayChartDiv"><h1>Campus Wide</h1></div>
+				<div id="categoryView" class="displayChartDiv"><h1>Campus Wide</h1></div>
+			
+						<script>
+						console.log("script run")
+						var everybodyChart = document.getElementById('chartdiv');
+						var barsChart = document.getElementById('categoryView');
 
-				<div id="chartdiv" style="width: 100%; height: 600px;"></div>
+						document.getElementById("everyoneNav").onclick = function () {
+							console.log("everyone clicked");
+							var display = document.getElementById("chartdiv");
+							var dontdisplay = document.getElementById("categoryView");
+
+							console.log("Display name:");
+
+							for(var i=0, n= display.length; i<n; ++i){
+														console.log(display.length);
+
+							display[i].id = "chartdiv";	
+							console.log(display[i].id);	
+							window.location.reload(true);
+							
+							dontdisplay.style.display = 'block';
+							display.style.display = 'none';						
+							}
+						};
+						document.getElementById("barsNav").onclick = function () {
+							console.log("bars clicked");
+							console.log("Display name:");
+
+							var display = document.getElementById("chartdiv");
+							var dontdisplay = document.getElementById("categoryView");
+
+							for(var i=0, n= display.length; i<n; ++i){
+							console.log(display.length);
+							display[i].id = "categoryView";	
+							console.log(display[i].id);	
+							window.location.reload(true);
+							
+							dontdisplay.style.display = 'none';
+							display.style.display = 'block';						
+							
+							}
+						};
+
+
+
+
+						</script>
+
+
           <h1 class="page-header">Dashboard</h1>
-
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div>
-
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
     <script src="../../assets/js/vendor/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -96,6 +147,88 @@
         <script src="amcharts/amcharts/pie.js" type="text/javascript"></script>
 
         
+        
+		<select id="select" class="uLoc" name="uLoc">
+		<option value="0">Where'd you go?:</option>
+		<option value="1">Mex</option>
+		<option value="2">Daily</option>
+		<option value="3">Old Toad</option>
+		</select>
+		
+
+<script>
+function showHint(str) {
+    if (str.length == 0) { 
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+            }
+        };
+        xmlhttp.open("GET", "gethint.php?q=" + str, true);
+        xmlhttp.send();
+    }
+}
+</script>
+
+<script>
+function getPeople(str) {
+    if (str.length == 0) { 
+        document.getElementById("peopleHint").innerHTML = "";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("peopleHint").innerHTML = xmlhttp.responseText;
+            }
+        };
+        xmlhttp.open("GET", "getPeople.php?q=" + str, true);
+        xmlhttp.send();
+    }
+}
+</script>
+
+<body>
+
+<h2>Search for Locations</h2>
+<form> 
+Name: <input type="text" onkeyup="showHint(this.value)">
+</form>
+<p>Suggestions: <span id="txtHint"></span></p>
+</body>
+
+<h2>Search for People</h2>
+<form> 
+Name: <input type="text" onkeyup="getPeople(this.value)">
+</form>
+<p>People: <span id="peopleHint"></span></p>
+</body>
+
+		
+		<script>
+		$(document).ready(function() {
+		    $('select.uLoc').change(function(){
+			console.log("Change Detected")
+			console.log($('select.uLoc').val());
+		        $.ajax({
+						type: 'POST',
+		                url: 'dashboard.php',
+						data: {mydata:$('select.uLoc').val()},
+						success: function(){     
+						console.log("POST Success");
+						},
+						error: function() {
+				 		alert( "Sorry, there was a problem!" );
+						}
+						
+		         });
+		    });
+		});
+		</script>
 		
 		<?php
 		$serverName = "GARRETTSURFACE"; //serverName\instanceName
@@ -108,6 +241,26 @@
      		die( print_r( sqlsrv_errors(), true));
 		}
 		
+		
+		echo "outside locationID post loop!!!!";
+		if(isset($_POST['mydata']))
+		{
+		echo "locationID was set";
+		$newLocID = $_POST['select'];
+		$sqlUpdate = "UPDATE Students SET locationId=$newLocID where email=$_COOKIE[$email]";
+		$stmt2 = sqlsrv_query($conn,$sqlUpdate,$params);
+		
+		if( sqlsrv_fetch( $stmt2 ) === false) {
+     		die( print_r( sqlsrv_errors(), true));
+		}
+		}
+		else {
+			echo "select if not enetered";
+			
+		}
+		
+
+		//going to have to make this something else to generate number of locations
 		$locations = array("1","2","3","4","5","6","7","8");
 		$locationValues = array();
         foreach($locations as $value){
@@ -189,9 +342,71 @@
                 chart.write(\"chartdiv\");
             });
         </script>";
+		
+		$catlocs = array("1","2","3","4");
+		$catlocsValues = array();
+        foreach($catlocs as $catvalue){
+		$sqlloccat = "Select Count(*) from LocCategories a inner join Locations b on a.categoryID = b.categoryID inner join Students c on c.locationID = b.locationID where b.categoryID = $catvalue";
+		$stmtGetCats = sqlsrv_query($conn,$sqlloccat,$params);
+		
+		if( sqlsrv_fetch( $stmtGetCats ) === false) {
+     		die( print_r( sqlsrv_errors(), true));
+		}
+		
+		$categoryNames = sqlsrv_get_field( $stmtGetCats, 0);
+		$catlocsValues[]=$categoryNames;
+
+		}
+		
+		$bar = $catlocsValues[0];
+		$library = $catlocsValues[1];
+		$other = $catlocsValues[2];
+		$barparty = $catlocsValues[3];
+		
+				echo "<script>
+            var chartCat;
+            var legend;
+
+            var chartDataCat = [
+                {
+                    \"country\": \"Bars\",
+                    \"value\": $bar,
+                },
+                {
+                    \"country\": \"Library\",
+                    \"value\": $library,
+                },
+				                {
+                    \"country\": \"Other\",
+                    \"value\": $other,
+                },
+				                {
+                    \"country\": \"Bar Party\",
+                    \"value\": $barparty,
+                }
+            ];
+
+            AmCharts.ready(function () {
+                // PIE CHART
+                chartCat = new AmCharts.AmPieChart();
+                chartCat.dataProvider = chartDataCat;
+                chartCat.titleField = \"country\";
+                chartCat.valueField = \"value\";
+                chartCat.outlineColor = \"black\";
+                chartCat.outlineAlpha = 0.8;
+                chartCat.outlineThickness = 2;
+                chartCat.balloonText = \"[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>\";
+                chartCat.depth3D = 15;
+                chartCat.angle = 30;
+
+                // WRITE
+                chartCat.write(\"categoryView\");
+            });
+        </script>";
+		
 		?>
 		
-		
+
 
     </body>
 

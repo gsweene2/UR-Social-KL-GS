@@ -23,15 +23,12 @@ print '<p class="navbar-text navbar-right"><button onclick="signOut()">Sign Out<
 
 } else {
 
-print '<p class="navbar-text navbar-right"><a href="#" class="navbar-link">You are not logged in</a></p>';
-
-print '<p class="navbar-text navbar-right">
-<form method="post" action="index.php">
-  <p class="navbar-text navbar-right"><button type="submit" formmethod="post" formaction="index.php">Log In!</button></p>
-  <p class="navbar-text navbar-right">Email: <input type="text" name="EmailLogin"></p>
+print '
+<form class="navbar-text navbar-right" method="post" action="index.php">
+  <p class="navbar-text navbar-right"><button type="submit" formmethod="post" formaction="index.php">Log In!</button>
+ </p> <p class="navbar-text navbar-right">Email: <input type="text" name="EmailLogin"></p>
 </form>
  
-</p>
 ';
 
 }
@@ -41,9 +38,9 @@ print '<p class="navbar-text navbar-right">
 <script>
 function signOut() {
 	console.log("Inside SignOut function");
-    var cookie_name = 'phpCookieName';
+    	var cookie_name = 'phpCookieName';
 	delete_cookie(cookie_name);
-location.reload(true);
+	location.reload(true);
 }
 
 function delete_cookie(name){
