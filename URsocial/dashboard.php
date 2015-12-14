@@ -1,4 +1,14 @@
 
+
+
+<?php 
+
+if(!isset($_COOKIE['email'])){
+header("Location: index.php");
+}
+
+?>
+
 <!doctype html>
 
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -37,17 +47,38 @@
 
             }
 			
-			#chartdiv{
-				display: inline-block;
+			#everyonediv{
+
 				width: 100%;
 				 height: 500px;
 				 
 			}
 			
-			#categoryView{
-				display: inline-block;
+			#categorydiv{
+
 				width: 100%; 
 				height: 500px;
+			}
+			
+			.sweetFlex{
+				display: inline-block;
+				vertical-align: top;
+			}
+			
+			.displayChartDiv{
+				display: inline-block;
+			}
+			
+			.individual{
+				width:100%;
+			}
+			
+			.main-column{
+				width: 75%;
+			}
+			
+			.side-column{
+				width: 24%;
 			}
 
         </style>
@@ -61,76 +92,170 @@
         <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 		
 				<script src="js/jquery.js"></script>
+				
+				<script
+src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
+</script>
 
     </head>
 
     <body>
 
-<?php include "inc/nav.inc" ?>
+<?php 
+include "inc/nav.inc";
+?>
 
         <br/>
 		<br/>
 		
 		
-          <ul class="nav nav-sidebar">
-            <li id="everyoneNav" class="active"><a href="#">Everybody <span class="sr-only">(current)</span></a></li>
-            <li id="barsNav"><a href="#">Bars</a></li>
-            <li id="libNav"><a href="#">Libraries</a></li>
-            <li id="otherNav"><a href="#">Other</a></li>
-          </ul>
 <!-- chart 1 -->
-				<div id="chartdiv" class="displayChartDiv"><h1>Campus Wide</h1></div>
-				<div id="categoryView" class="displayChartDiv"><h1>Campus Wide</h1></div>
-			
-						<script>
-						console.log("script run")
-						var everybodyChart = document.getElementById('chartdiv');
-						var barsChart = document.getElementById('categoryView');
-
-						document.getElementById("everyoneNav").onclick = function () {
-							console.log("everyone clicked");
-							var display = document.getElementById("chartdiv");
-							var dontdisplay = document.getElementById("categoryView");
-
-							console.log("Display name:");
-
-							for(var i=0, n= display.length; i<n; ++i){
-														console.log(display.length);
-
-							display[i].id = "chartdiv";	
-							console.log(display[i].id);	
-							window.location.reload(true);
-							
-							dontdisplay.style.display = 'block';
-							display.style.display = 'none';						
-							}
-						};
-						document.getElementById("barsNav").onclick = function () {
-							console.log("bars clicked");
-							console.log("Display name:");
-
-							var display = document.getElementById("chartdiv");
-							var dontdisplay = document.getElementById("categoryView");
-
-							for(var i=0, n= display.length; i<n; ++i){
-							console.log(display.length);
-							display[i].id = "categoryView";	
-							console.log(display[i].id);	
-							window.location.reload(true);
-							
-							dontdisplay.style.display = 'none';
-							display.style.display = 'block';						
-							
-							}
-						};
-
-
-
-
-						</script>
-
-
           <h1 class="page-header">Dashboard</h1>
+
+				<div class="main-column sweetFlex">
+					<div id="everyonediv" class="displayChartDiv sweetFlex"><h1>Everybody!</h1></div>
+					<div id="categorydiv" class="displayChartDiv sweetFlex"><h1>Categories!</h1></div>
+				</div>
+				<div class="side-column sweetFlex">
+					<div class="panel panel-default">
+							<div class="panel-heading">
+		                            <i class="fa fa-bell fa-fw"></i> Location Charts
+		                     </div>
+				          <ul class="nav nav-sidebar">
+				            <li id="categoryNav"><a href="#">Category View</a></li>
+				            <li id="everyoneNav"><a href="#">Everyone View</a></li>							
+				            <li id="barsNav"><a href="#">Bars View</a></li>
+				            <li id="libNav"><a href="#">Libraries View</a></li>
+				            <li id="otherNav"><a href="#">Other View</a></li>
+				          </ul>
+					</div>
+
+					<div id="individualUpdates" class="individual sweetFlex">
+							<div class="panel panel-default">
+		                        <div class="panel-heading">
+		                            <i class="fa fa-bell fa-fw"></i> Most Recent Updates
+		                        </div>
+		                        <!-- /.panel-heading -->
+		                        <div class="panel-body">
+
+		                            <!-- /.list-group -->
+									
+																	<?php include "inc/popular.inc"; ?>
+																			                            <a href="#" class="btn btn-default btn-block">View All</a>
+
+																	
+		                        </div>
+
+		                        <!-- /.panel-body -->
+		                    </div>
+		                    <!-- /.panel -->
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+		                    <i class="fa fa-bell fa-fw"></i> Search Logistics
+		                 </div>
+
+						<p>Search for Locations</p>
+						<form> 
+						Name: <input type="text" onkeyup="showHint(this.value)">
+						</form>
+						<p>Suggestions: <span id="txtHint"></span></p>
+						</body>
+
+						<p>Search for People</p>
+						<form> 
+						Name: <input type="text" onkeyup="getPeople(this.value)">
+						</form>
+						<p>People: <span id="peopleHint"></span></p>
+					</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+			                    <i class="fa fa-bell fa-fw"></i> Update Location
+			                 </div>
+
+								<button class="locationbutton btn btn-primary" value="1">Mex</button>
+								<button class="locationbutton btn btn-primary" value="2">Daily</button>
+								<button class="locationbutton btn btn-primary" value="3">Gleason</button>
+								<button class="locationbutton btn btn-primary" value="4">PRR</button>
+								<button class="locationbutton btn btn-primary" value="5">Stacks</button>
+								<button class="locationbutton btn btn-primary" value="6">Off-Campus</button>
+								<button class="locationbutton btn btn-primary" value="7">One</button>
+								<button class="locationbutton btn btn-primary" value="8">Pearl</button>
+
+						</div>
+						<div class="panel panel-default">
+						<div class="panel-heading">
+		                    <i class="fa fa-bell fa-fw"></i> Account Options
+		                 </div>
+
+								<button class="deletebutton btn btn-primary" value="8">DELETE</button>
+					
+					</div>
+					</div>
+					
+
+					<script>
+					    $('.deletebutton').click(function(){
+						console.log("delete button clicked");
+						var newloc = $(this).val();
+				        $.ajax({
+				            type: "POST",
+				            url: "Delete.php",
+							data: {"value":newloc},
+				            success: function(data){
+
+						    console.log("deleting a success!");
+							console.log("THIS IS WHAT WE GOT BACK, OUR ECHO COMENTS: ");
+							console.log(data);
+				            },
+				            error: function(XMLHttpRequest, textStatus, errorThrown){
+				                addmsg("error", textStatus + " (" + errorThrown + ")");
+				                setTimeout(
+				                    getRecentUpdates,
+				                    1000);
+						console.log("Error updating location!");
+				            }
+				        });
+						
+						})
+				    
+					</script>
+					
+					<script>
+					    $('.locationbutton').click(function(){
+						console.log("CHANGE button clicked");
+						var newloc = $(this).val();
+				        $.ajax({
+				            type: "POST",
+				            url: "Update.php",
+							data: {"value":newloc},
+				            success: function(data){
+							console.log("NEW LOCATION VALUE: ");
+							console.log(newloc);
+						    console.log("updating a success!");
+							console.log("THIS IS WHAT WE GOT BACK, OUR ECHO COMENTS: ");
+							console.log(data);
+				            },
+				            error: function(XMLHttpRequest, textStatus, errorThrown){
+				                addmsg("error", textStatus + " (" + errorThrown + ")");
+				                setTimeout(
+				                    getRecentUpdates,
+				                    1000);
+						console.log("Error updating location!");
+				            }
+				        });
+						
+						})
+				    
+					</script>
+					
+					
+
+
+			
+
+
+    <script src="js/showgraphs.js"></script>
 
 
     <!-- Bootstrap core JavaScript
@@ -146,266 +271,42 @@
 	<script src="amcharts/amcharts/amcharts.js" type="text/javascript"></script>
         <script src="amcharts/amcharts/pie.js" type="text/javascript"></script>
 
-        
-        
-		<select id="select" class="uLoc" name="uLoc">
-		<option value="0">Where'd you go?:</option>
-		<option value="1">Mex</option>
-		<option value="2">Daily</option>
-		<option value="3">Old Toad</option>
-		</select>
 		
 
+    <script src="js/getlocations.js"></script>
+
+    <script src="js/getpeople.js"></script>
+
+
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-function showHint(str) {
-    if (str.length == 0) { 
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    } else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
-            }
-        };
-        xmlhttp.open("GET", "gethint.php?q=" + str, true);
-        xmlhttp.send();
-    }
-}
+var socket = io();
+  var socket = io();
+  $('form').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
+  });
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
 </script>
+		
+    <script src="js/updatealocation.js"></script>
+	<div id="eatmorepie">
+	<?php include "generatepie.php"	?>	
+	</div>
+	<script src="js/longpolling.js"></script>
+	
+	<div id="messages">Messages go here:</div>
 
-<script>
-function getPeople(str) {
-    if (str.length == 0) { 
-        document.getElementById("peopleHint").innerHTML = "";
-        return;
-    } else {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("peopleHint").innerHTML = xmlhttp.responseText;
-            }
-        };
-        xmlhttp.open("GET", "getPeople.php?q=" + str, true);
-        xmlhttp.send();
-    }
-}
-</script>
-
-<body>
-
-<h2>Search for Locations</h2>
-<form> 
-Name: <input type="text" onkeyup="showHint(this.value)">
-</form>
-<p>Suggestions: <span id="txtHint"></span></p>
-</body>
-
-<h2>Search for People</h2>
-<form> 
-Name: <input type="text" onkeyup="getPeople(this.value)">
-</form>
-<p>People: <span id="peopleHint"></span></p>
-</body>
-
-		
-		<script>
-		$(document).ready(function() {
-		    $('select.uLoc').change(function(){
-			console.log("Change Detected")
-			console.log($('select.uLoc').val());
-		        $.ajax({
-						type: 'POST',
-		                url: 'dashboard.php',
-						data: {mydata:$('select.uLoc').val()},
-						success: function(){     
-						console.log("POST Success");
-						},
-						error: function() {
-				 		alert( "Sorry, there was a problem!" );
-						}
-						
-		         });
-		    });
-		});
-		</script>
-		
-		<?php
-		$serverName = "GARRETTSURFACE"; //serverName\instanceName
-		$connectionInfo = array( "Database"=>"URSocial", "UID"=>"sa", "PWD"=>"Ralphie08");
-		$conn = sqlsrv_connect( $serverName, $connectionInfo);
-
-		if( $conn ) {
-		}else{
-     		echo "Connection could not be established.<br /> Please contact the sweet administrative crew.";
-     		die( print_r( sqlsrv_errors(), true));
-		}
-		
-		
-		echo "outside locationID post loop!!!!";
-		if(isset($_POST['mydata']))
-		{
-		echo "locationID was set";
-		$newLocID = $_POST['select'];
-		$sqlUpdate = "UPDATE Students SET locationId=$newLocID where email=$_COOKIE[$email]";
-		$stmt2 = sqlsrv_query($conn,$sqlUpdate,$params);
-		
-		if( sqlsrv_fetch( $stmt2 ) === false) {
-     		die( print_r( sqlsrv_errors(), true));
-		}
-		}
-		else {
-			echo "select if not enetered";
-			
-		}
-		
-
-		//going to have to make this something else to generate number of locations
-		$locations = array("1","2","3","4","5","6","7","8");
-		$locationValues = array();
-        foreach($locations as $value){
-		$sql1 = "SELECT COUNT(*) FROM STUDENTS WHERE locationID= $value";
-		$stmt = sqlsrv_query($conn,$sql1,$params);
-		
-		if( sqlsrv_fetch( $stmt ) === false) {
-     		die( print_r( sqlsrv_errors(), true));
-		}
-		
-		$name = sqlsrv_get_field( $stmt, 0);
-		$locationValues[]=$name;
-
-		}	
-		
-		$a= $locationValues[0];
-		$b= $locationValues[1];
-		$c= $locationValues[2];
-		$d= $locationValues[3];
-		$e= $locationValues[4];
-		$f= $locationValues[5];
-		$g= $locationValues[6];
-		$h= $locationValues[7];
-		
-		
-		echo "<script>
-            var chart;
-            var legend;
-
-            var chartData = [
-                {
-                    \"country\": \"Mex\",
-                    \"value\": $a,
-                },
-                {
-                    \"country\": \"Daily\",
-                    \"value\": $b,
-                },
-				                {
-                    \"country\": \"Gleason\",
-                    \"value\": $c,
-                },
-				                {
-                    \"country\": \"PRR\",
-                    \"value\": $d,
-                },
-				                {
-                    \"country\": \"Stacks\",
-                    \"value\": $e,
-                },
-				                {
-                    \"country\": \"Off-Campus\",
-                    \"value\": $f,
-                },
-				                {
-                    \"country\": \"One\",
-                    \"value\": $g,
-                },
-				                {
-                    \"country\": \"Pearl\",
-                    \"value\": $h,
-                }
-            ];
-
-            AmCharts.ready(function () {
-                // PIE CHART
-                chart = new AmCharts.AmPieChart();
-                chart.dataProvider = chartData;
-                chart.titleField = \"country\";
-                chart.valueField = \"value\";
-                chart.outlineColor = \"black\";
-                chart.outlineAlpha = 0.8;
-                chart.outlineThickness = 2;
-                chart.balloonText = \"[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>\";
-                chart.depth3D = 15;
-                chart.angle = 30;
-
-                // WRITE
-                chart.write(\"chartdiv\");
-            });
-        </script>";
-		
-		$catlocs = array("1","2","3","4");
-		$catlocsValues = array();
-        foreach($catlocs as $catvalue){
-		$sqlloccat = "Select Count(*) from LocCategories a inner join Locations b on a.categoryID = b.categoryID inner join Students c on c.locationID = b.locationID where b.categoryID = $catvalue";
-		$stmtGetCats = sqlsrv_query($conn,$sqlloccat,$params);
-		
-		if( sqlsrv_fetch( $stmtGetCats ) === false) {
-     		die( print_r( sqlsrv_errors(), true));
-		}
-		
-		$categoryNames = sqlsrv_get_field( $stmtGetCats, 0);
-		$catlocsValues[]=$categoryNames;
-
-		}
-		
-		$bar = $catlocsValues[0];
-		$library = $catlocsValues[1];
-		$other = $catlocsValues[2];
-		$barparty = $catlocsValues[3];
-		
-				echo "<script>
-            var chartCat;
-            var legend;
-
-            var chartDataCat = [
-                {
-                    \"country\": \"Bars\",
-                    \"value\": $bar,
-                },
-                {
-                    \"country\": \"Library\",
-                    \"value\": $library,
-                },
-				                {
-                    \"country\": \"Other\",
-                    \"value\": $other,
-                },
-				                {
-                    \"country\": \"Bar Party\",
-                    \"value\": $barparty,
-                }
-            ];
-
-            AmCharts.ready(function () {
-                // PIE CHART
-                chartCat = new AmCharts.AmPieChart();
-                chartCat.dataProvider = chartDataCat;
-                chartCat.titleField = \"country\";
-                chartCat.valueField = \"value\";
-                chartCat.outlineColor = \"black\";
-                chartCat.outlineAlpha = 0.8;
-                chartCat.outlineThickness = 2;
-                chartCat.balloonText = \"[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>\";
-                chartCat.depth3D = 15;
-                chartCat.angle = 30;
-
-                // WRITE
-                chartCat.write(\"categoryView\");
-            });
-        </script>";
-		
-		?>
-		
 
 
     </body>

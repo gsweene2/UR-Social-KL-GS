@@ -20,24 +20,31 @@ if( $conn ) {
 }
 
 
-$sql = "SELECT firstname FROM STUDENTS WHERE email = '$emailLog'";
+$sql = "SELECT firstname,email FROM STUDENTS WHERE email = '$emailLog'";
 $stmt = sqlsrv_query($conn,$sql,$params);
 		if( sqlsrv_fetch( $stmt ) == false) {
+			header("Location: index.php");
      		die( print_r( sqlsrv_errors(), true));
 		}
 		
 		$name = sqlsrv_get_field($stmt, 0);
+		$emailfield = sqlsrv_get_field($stmt, 1);
+
 
 $cookie_name = 'phpCookieName';
 $cookie_value = $name;
 $_COOKIE['phpCookieName'] = $name;
 
+
 $cookie_Email = 'email';
-$cookie_Emailvalue = $emailLog;
-$_COOKIE['email'] = $name;
+$cookie_Emailvalue = $emailfield;
+$_COOKIE['email'] = $emailfield;
 
 setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/');
 setcookie($cookie_Email, $cookie_Emailvalue, time() + (86400 * 30), '/');
+
+sqlsrv_close( $conn );
+
 }
 ?>
 
@@ -85,20 +92,16 @@ setcookie($cookie_Email, $cookie_Emailvalue, time() + (86400 * 30), '/');
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
-          <h2>View Friends Destinations</h2>
+          <h2>Map!</h2>
           <p>Instantly view your friends social plans and real-time locations as the night progresses. Meet up with those who you may not have contact with on the regular! </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p><a class="btn btn-default" href="map.php" role="button">View details &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>Student Body Activity</h2>
           <p>UR Social gives you the ability to see how your fellow students are spending the night; rather it be in the library, bars, or simply off campus. </p>
           <p><a class="btn btn-default" href="dashboard.php" role="button">See Student Body &raquo;</a></p>
        </div>
-        <div class="col-md-4">
-          <h2>Check-in</h2>
-          <p>Check-in at any point during the night to update the live student body feed and allow your close friends to see where you're going!</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
+
       </div>
 
       <hr>

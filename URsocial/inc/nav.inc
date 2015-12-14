@@ -40,6 +40,8 @@ function signOut() {
 	console.log("Inside SignOut function");
     	var cookie_name = 'phpCookieName';
 	delete_cookie(cookie_name);
+    	var cookie_nameE = 'email';
+	delete_cookie(cookie_nameE);
 	location.reload(true);
 }
 

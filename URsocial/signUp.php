@@ -63,27 +63,39 @@
 <div class="fieldsetheader">Register for URSocial!</div>
 <br/>
 
-<label>First Name :</label>
-<input type="text" name="fname" id="fname" /><br/>
-<label>Last Name :</label>
-<input type="text" name="lname" id="lname" /><br/>
-<label>Age :</label>
-<input type="text" name="age" id="age" /><br/>
-<label>Email<label>
-<input type="text" name="email" id="email" /><br/>
-<label>SchoolID :</label>
-<input type="text" name="sID" id="sID" /><br/>
-<label>LocationID :</label>
-<input type="text" name="lID" id="lID" /><br/>
-<span><input type="radio" name="method" value="post">Accept Terms and get Social!</span><br/>
+<div class="form-group">
+    <label for="name">First Name:</label>
+    <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
+ </div>
+ 
+ <div class="form-group">
+    <label for="name">Last Name:</label>
+    <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
+ </div>
+ 
+ <div class="form-group">
+    <label for="name">Age:</label>
+    <input type="text" class="form-control" name="age" id="age" placeholder="Age">
+ </div>
+ 
+  <div class="form-group">
+    <label for="name">Email:</label>
+    <input type="email" class="form-control" name="email" id="email" placeholder="Valid Email">
+ </div>
+ 
+  <div class="form-group">
+    <label for="name">School ID:</label>
+    <input type="text" class="form-control" name="sID" id="sID" placeholder="Enter 1 for UR">
+ </div>
+
 <input type="submit" name="submit" id="submit" value="Submit">
 </form>
 
 <?php
 
-ini_set('display_errors', 1);
+/*ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL); */
 if(isset($_POST['fname']))
 {
 
@@ -93,7 +105,7 @@ $lname = $_POST['lname'];
 $age = $_POST['age'];
 $email = $_POST['email'];
 $sID = $_POST['sID'];
-$lID = $_POST['lID'];
+
 
 $serverName = "GARRETTSURFACE"; //serverName\instanceName
 $connectionInfo = array( "Database"=>"URSocial", "UID"=>"sa", "PWD"=>"Ralphie08");
@@ -105,12 +117,33 @@ if( $conn ) {
      die( print_r( sqlsrv_errors(), true));
 }
 
-$sql = "INSERT INTO Students (firstname,lastname,email,age,schoolID,locationID) VALUES ('$fname','$lname','$email',$age,$sID,1)";
-$stmt = sqlsrv_query( $conn, $sql, $params);
 
-$sql2 = "SELECT * FROM STUDENTS WHERE email = $email";
-$stmt = sqlsrv_query($conn,$sql2,$params);
-echo $stmt;
+$tsql = "INSERT INTO Students (firstname,lastname,email,age,schoolID,locationID) VALUES (?,?,?,?,?,?)";
+
+/* Set parameter values. */
+$params = array($fname,$lname,$email,$age,$sID,1);
+
+/* Prepare and execute the query. */
+$stmt = sqlsrv_query( $conn, $tsql, $params);
+if( $stmt )
+{
+     echo "Row successfully inserted.\n";
+}
+else
+{
+     echo "Row insertion failed.\n";
+     die( print_r( sqlsrv_errors(), true));
+}
+
+/* Free statement and connection resources. */
+sqlsrv_free_stmt( $stmt);
+sqlsrv_close( $conn);
+
+
+
+
+
+
 
 echo "Welcome ".$fname."! Your account has been successfully created";
 
